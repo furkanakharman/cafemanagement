@@ -15,6 +15,7 @@ import com.acker.cafemanagement.service.MenuService;
 
 @RestController
 @RequestMapping("/api/v1/menu")
+@CrossOrigin(origins = "http://localhost:4200") // for angular to interact with the controller
 public class MenuController {
 	final Logger logger = LoggerFactory.getLogger(MenuController.class);
 	@Autowired
