@@ -27,6 +27,12 @@ public class UserService {
 	public List<DineTable> getDineTables() {
 		return dbConnectionService.getDineTables();
 	}
+
+
+	public List<Customer> getCustomers() {
+		return dbConnectionService.getCustomers();
+		
+	}
 	
 	
 	//end of the class

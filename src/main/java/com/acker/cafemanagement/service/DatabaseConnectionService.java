@@ -81,7 +81,7 @@ public class DatabaseConnectionService {
 	public int postMenuCategory(MenuCategory menuCategory) {
 		String postMenuCategoryQuery="INSERT INTO menucategory(categoryname,categorydescription) VALUES('"+menuCategory.categoryName+"','" +menuCategory.categoryDescription+"');";
 			return this.executeUpdate(postMenuCategoryQuery);
-			//Check if the insertion was successful and inform the user		
+		
 	}
 	
 	public List<MenuItems> getMenuItems(int categoryId){
@@ -112,18 +112,20 @@ public class DatabaseConnectionService {
 			return this.executeUpdate(postMenuCategoryQuery);			
 	}
 	
+	//this query gets executed before insertion (possible query caching) therefore return no data, if we used hibernate
 	public Customer getCustomerByTableNumber(Long TableNumber) {
-		String getCustomerByTableNumberQuery="SELECT id,name,fktablenumber FROM customers WHERE fktablenumber="+TableNumber+";";		
+		String getCustomerByTableNumberQuery="SELECT id,name,fktablenumber FROM customers WHERE fktablenumber='"+TableNumber+"';";		
 		Customer customer=new Customer();
 		try {
 			ResultSet rs = this.executeQuery(getCustomerByTableNumberQuery);
-			
+			while(rs.next()) {
 			customer.setId(rs.getLong("id"));
 			customer.setFktablenumber(rs.getLong("fktablenumber"));
 			customer.setName(rs.getString("name"));
+			}
 			
 		} catch (SQLException e) {
-		logger.error("SQL Error {}",e);
+		logger.error("SQL Error in getcustomerByTableNumber {}",e);
 		}
 		return customer;
 	}
@@ -132,10 +134,19 @@ public class DatabaseConnectionService {
 		String createInitialOrderQuery="INSERT INTO orders(fkcustomerid) VALUES ("+id+");";
 		return this.executeUpdate(createInitialOrderQuery);
 	}
+	public void setTableStatusByTableNumber(String status,Long tableNumber) {
+		String setTableStatus="UPDATE tables SET availability='"+status+"' WHERE id="+tableNumber+";";
+		this.executeUpdate(setTableStatus);
+		
+	}
+	//Create a user and set their table Occupied then create empty order
 	public Customer putCustomer(Customer customer) {
-		String putCustomerQuery="INSERT INTO customers(name,fktablenumber) VALUES('"+customer.getName()+"',"+customer.getFktablenumber()+");";
+		String putCustomerQuery="INSERT INTO customers(name,fktablenumber) VALUES('"+customer.name+"',"+customer.fktablenumber+");";
 		this.executeUpdate(putCustomerQuery);
-		Customer insertedCustormer = this.getCustomerByTableNumber(customer.getFktablenumber());
+		this.setTableStatusByTableNumber("Occupied",customer.fktablenumber);
+		Customer insertedCustormer = new Customer();
+	
+		insertedCustormer = this.getCustomerByTableNumber(customer.fktablenumber);
 		this.createInitialOrder(insertedCustormer.getId());
 		return insertedCustormer;
 	}
@@ -157,5 +168,25 @@ public class DatabaseConnectionService {
 		return listDineTables;
 		
 	}
+	public List<Customer> getCustomers() {
+		String getCustomersQuery="SELECT id,fktablenumber,name FROM customers;";
+		List<Customer> listCustomers = new ArrayList<Customer>();
+		try {
+			ResultSet rs=this.executeQuery(getCustomersQuery);
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setId(rs.getLong("id"));
+				customer.setFktablenumber(rs.getLong("fktablenumber"));
+				customer.setName(rs.getString("name"));
+				listCustomers.add(customer);
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return listCustomers;
+	}
 	
+	
+	
+	//eoc
 }

@@ -3,7 +3,7 @@ CREATE TABLE tables(id IDENTITY PRIMARY KEY,tablenumber INT AUTO_INCREMENT,avail
 ---Customers table
 CREATE TABLE customers(id IDENTITY PRIMARY KEY, name VARCHAR(30),fkTableNumber LONG,FOREIGN KEY (fktablenumber) REFERENCES tables(id),registerDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP());
 ---Orders table
-CREATE TABLE orders(id IDENTITY PRIMARY KEY,fkCustomerId LONG,FOREIGN KEY (fkCustomerId) REFERENCES customers(id),customerNote VARCHAR(150),totalPrice INT,orderStatus VARCHAR(30) DEFAULT 'Waiting',orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP());
+CREATE TABLE orders(id IDENTITY PRIMARY KEY,fkCustomerId LONG,FOREIGN KEY (fkCustomerId) REFERENCES customers(id),customerNote VARCHAR(150),totalPrice INT,orderStatus VARCHAR(30) DEFAULT 'New',orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP());
 --- Menu Categories and individual Menu Items
 CREATE TABLE menuCategory(id IDENTITY PRIMARY KEY,categoryName VARCHAR(50),categoryDescription VARCHAR(200));
 CREATE TABLE menuItems(id IDENTITY PRIMARY KEY,fkMenuCategory LONG,FOREIGN KEY (fkMenuCategory) REFERENCES MenuCategory(id),itemName VARCHAR(40),itemDescription VARCHAR(200),imageUrl VARCHAR(250),cost INT);

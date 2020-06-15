@@ -35,8 +35,8 @@ public class UserController {
 	}
 	@GetMapping(value="/customers")
 	public @ResponseBody List<Customer> getCustomers() {
+		return userService.getCustomers();
 		
-		return null;
 	}
 	
 	@PutMapping(value="/customers",consumes="application/json")
