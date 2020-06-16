@@ -2,7 +2,7 @@ package com.acker.cafemanagement.entity;
 
 import javax.persistence.Entity;
 
-@Entity
+
 public class ServerObject {
 	public Long serverId;
 	public Long orderId;

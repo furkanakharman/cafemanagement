@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.acker.cafemanagement.entity.Customer;
 import com.acker.cafemanagement.entity.DatabaseConnection;
 import com.acker.cafemanagement.entity.DineTable;
+import com.acker.cafemanagement.entity.FinalizedOrderEntity;
 import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuCategory;
 import com.acker.cafemanagement.entity.MenuItems;
@@ -200,7 +201,7 @@ public class DatabaseConnectionService {
 	
 	//returns list of orders marked as "Waiting"
 	public List<OrderEntity> getGivenOrders() {
-		String getGivenOrdersQuery = "SELECT id,fkcustomerid,customernote FROM orders WHERE orderstatus='Waiting';";
+		String getGivenOrdersQuery = "SELECT id,fkcustomerid,customernote FROM orders WHERE orderstatus='waiting';";
 		List<OrderEntity> listOrders = new ArrayList<OrderEntity>();
 		try {
 			ResultSet rs = this.executeQuery(getGivenOrdersQuery);
@@ -211,6 +212,7 @@ public class DatabaseConnectionService {
 				orderEntity.setCustomerNote(rs.getString("customernote"));
 				listOrders.add(orderEntity);
 			}
+			
 		} catch (SQLException sqlex) {
 			logger.error("SQL Error {}",sqlex);
 		}
@@ -253,7 +255,8 @@ public class DatabaseConnectionService {
 		try {
 			ResultSet rs = this.executeQuery(myOrderStatusQuery);
 			while(rs.next()) {
-				status=rs.getString("orderstatus");
+				String orderStatus=rs.getString("orderstatus");
+				return orderStatus;
 			}
 		} catch (SQLException sqlex) {
 			logger.error("SQL Error {}",sqlex);
@@ -294,6 +297,11 @@ public class DatabaseConnectionService {
 		String recordServedOrderQuery = "INSERT INTO servedorders(fkserverid,fkorderid) VALUES('"+serverObject.getServerId()+"','"+serverObject.getOrderId()+"';";
 		this.executeUpdate(setOrderServedQuery);
 		this.executeUpdate(recordServedOrderQuery);
+		
+	}
+	public void makeOrder(FinalizedOrderEntity finalizeOrder) {
+		String makeOrderQuery="UPDATE orders SET customernote='"+finalizeOrder.getCustomerNote()+"',orderstatus='waiting' WHERE id='"+finalizeOrder.orderId+"';";
+		this.executeUpdate(makeOrderQuery);
 		
 	}
 	

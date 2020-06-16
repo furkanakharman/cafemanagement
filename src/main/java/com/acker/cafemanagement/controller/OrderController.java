@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acker.cafemanagement.entity.FinalizedOrderEntity;
 import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuItems;
 import com.acker.cafemanagement.entity.OrderEntity;
@@ -36,12 +37,12 @@ public class OrderController {
 	
 	//Customer finalizes their order, customer note will be sent in this step.
 	@PostMapping("/customer")
-	public @ResponseBody OrderEntity makeOrder() {
-		orderService.makeOrder();
-		return null;
+	public String makeOrder(@RequestBody FinalizedOrderEntity finalizedOrder) {
+		orderService.makeOrder(finalizedOrder);
+		return "done";
 	}
 	//Customer checks their order status
-	@GetMapping("/customer/{id}")
+	@GetMapping("/customer/{customerId}")
 	public String myOrderStatus(@PathVariable String customerId) {
 		return orderService.myOrderStatus(customerId);
 		
@@ -54,13 +55,13 @@ public class OrderController {
 	
 	}
 	//kitchen will receive individual items in the order and set selected order as "preparing"
-	@GetMapping("/kitchen/{id}")
+	@GetMapping("/kitchen/{orderId}")
 	public @ResponseBody List<OrderKitchen> selectOrder(@PathVariable String orderId){
 		return orderService.selectOrder(orderId);
 		
 	}
 	//kitchen will mark order as "Ready to Serve" then both servers and customers will be alerted
-	@PostMapping("/kitchen/{id}")
+	@PostMapping("/kitchen/{orderId}")
 	public String readyOrder(@PathVariable String orderId) {
 		return orderService.readyOrder(orderId);
 		

@@ -7,8 +7,9 @@ import javax.persistence.Entity;
  * Maybe my design sucks, I have made many mistakes but just realizing them.
  * "Akılsız başın cezasını Spaghetti Code çekermiş...
 ***/
-@Entity
+
 public class ItemOrder {
+	private Long id;
 	public Long fkOrderId;
 	public Long fkMenuItemId;
 	public int quantity;
@@ -29,6 +30,12 @@ public class ItemOrder {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	

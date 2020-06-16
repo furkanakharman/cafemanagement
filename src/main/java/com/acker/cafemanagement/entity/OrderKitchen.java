@@ -3,7 +3,7 @@ package com.acker.cafemanagement.entity;
 import javax.persistence.Entity;
 
 //Uninspired naming, i know.
-@Entity
+
 public class OrderKitchen {
 		public Long fkOrderId;
 		public String itemName;

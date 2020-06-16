@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.acker.cafemanagement.entity.FinalizedOrderEntity;
 import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuItems;
 import com.acker.cafemanagement.entity.OrderEntity;
@@ -49,8 +50,8 @@ public class OrderService {
 		
 	}
 
-	public void makeOrder() {
-		// TODO Auto-generated method stub
+	public void makeOrder(FinalizedOrderEntity finalizeOrder) {
+		dbConnectionService.makeOrder(finalizeOrder);
 		
 	}
 
