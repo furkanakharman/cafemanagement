@@ -1,4 +1,4 @@
-#**Cafe Management Application**
+# **Cafe Management Application**
 
 ## Table of Contents
 + [Installation](#installation)
@@ -39,7 +39,7 @@ API Request Examples:
 
 ## Documentation
 
-Swagger ui link
+[Swagger UI ](http://localhost:8080/swagger-ui.html)  (if app deployed on localhost:8080)
 
 ## Issues
 
