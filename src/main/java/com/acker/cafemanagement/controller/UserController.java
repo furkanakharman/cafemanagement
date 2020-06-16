@@ -19,6 +19,7 @@ import com.acker.cafemanagement.entity.Customer;
 import com.acker.cafemanagement.entity.DineTable;
 
 import com.acker.cafemanagement.entity.Server;
+import com.acker.cafemanagement.entity.ServerReport;
 import com.acker.cafemanagement.service.UserService;
 
 @RestController
@@ -28,40 +29,46 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
+	//Get availabilities of tables, 
+	//TODO: to you, from the backend: block people from choosing occupied tables in the frontend
 	@GetMapping(value="/tables")
 	public List<DineTable> getDineTables() {
 		return userService.getDineTables();
 	}
+	//Get all customers
 	@GetMapping(value="/customers")
 	public @ResponseBody List<Customer> getCustomers() {
-		return userService.getCustomers();
-		
+		return userService.getCustomers();		
 	}
-	
+	//Register new customer
 	@PutMapping(value="/customers",consumes="application/json")
 	public @ResponseBody Customer putCustomer(@RequestBody Customer jsonString) {
 		return userService.putCustomer(jsonString);
 	}
-	
+	@DeleteMapping(value="/customers/{id}")
+	public String deleteCustomer(@PathVariable String id) {
+		//TODO:Implement delete customer function
+		return "Feature hasn't been Implemented yet.";
+	}
 	//list of working servers
 	@GetMapping(value="/servers")
 	public @ResponseBody List<Server> getServers(){
+		return userService.getServers();
 		
-		return null;
 	}
-	@GetMapping(value="/servers/{id}")
-	public String getServerReport(@PathVariable String id) {
-		return null;
+	@GetMapping(value="/servers/{serverId}")
+	public @ResponseBody List<ServerReport> getServerReport(@PathVariable String serverId) {
+		return userService.getServerReport(serverId);
 	}
 	//For new server hires
 	@PutMapping(value="/servers")
-	public String putServer(@RequestBody Server jsonString){
-		return null;
+	public @ResponseBody Server putServer(@RequestBody Server jsonString){
+		userService.putServer(jsonString);
+		return jsonString;
 	}
 	@DeleteMapping(value="/servers/{id}")
 	public String deleteServer(@PathVariable String id) {
-		//delete server with given id
+		//TODO:elete server with given id
 		return null;
 	}
 	

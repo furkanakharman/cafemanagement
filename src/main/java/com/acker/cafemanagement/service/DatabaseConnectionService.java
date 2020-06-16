@@ -19,7 +19,9 @@ import com.acker.cafemanagement.entity.MenuCategory;
 import com.acker.cafemanagement.entity.MenuItems;
 import com.acker.cafemanagement.entity.OrderEntity;
 import com.acker.cafemanagement.entity.OrderKitchen;
+import com.acker.cafemanagement.entity.Server;
 import com.acker.cafemanagement.entity.ServerObject;
+import com.acker.cafemanagement.entity.ServerReport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,6 +223,7 @@ public class DatabaseConnectionService {
 	//returns Customers' Ordered MenuItems, using associtation table between menuitem and orders, the ItemOrders table.
 	public List<OrderKitchen> selectOrder(String id) {
 		String selectOrderQuery = "SELECT fkorderid,itemname,quantity FROM menuitems INNER JOIN itemorders on menuitems.id = itemorders.fkmenuitemid WHERE itemorders.fkorderid ='"+id+"';";
+		String setPreparingStateQuery = "UPDATE orders SET orderstatus='preparing' WHERE id='"+id+"';";
 		List<OrderKitchen> listOrderKitchen = new ArrayList<OrderKitchen>();
 		try {
 			ResultSet rs = this.executeQuery(selectOrderQuery);
@@ -234,6 +237,7 @@ public class DatabaseConnectionService {
 		} catch  (SQLException sqlex) {
 			logger.error("SQL Error {}",sqlex);
 		}
+		this.executeUpdate(setPreparingStateQuery);
 		return listOrderKitchen;
 	}
 	public int addItems(List<ItemOrder> listItemOrder) {
@@ -265,7 +269,7 @@ public class DatabaseConnectionService {
 		
 	}
 	public String readyOrder(String orderId) {
-		String readyOrderQuery="UPDATE orders SET orderstatus='readytoserve';";
+		String readyOrderQuery="UPDATE orders SET orderstatus='readytoserve' WHERE id='"+orderId+"';";
 		this.executeUpdate(readyOrderQuery);
 		return "Order "+orderId+" set Ready To Serve";
 		
@@ -293,8 +297,8 @@ public class DatabaseConnectionService {
 	
 	//served order's status will be set to "served" then added to server's record
 	public void orderServed(ServerObject serverObject) {
-		String setOrderServedQuery = "UPDATE orders SET status='served' WHERE id='"+serverObject.getOrderId()+"';";
-		String recordServedOrderQuery = "INSERT INTO servedorders(fkserverid,fkorderid) VALUES('"+serverObject.getServerId()+"','"+serverObject.getOrderId()+"';";
+		String setOrderServedQuery = "UPDATE orders SET orderstatus='served' WHERE id='"+serverObject.getOrderId()+"';";
+		String recordServedOrderQuery = "INSERT INTO servedorders(fkserverid,fkorderid) VALUES('"+serverObject.getServerId()+"','"+serverObject.getOrderId()+"');";
 		this.executeUpdate(setOrderServedQuery);
 		this.executeUpdate(recordServedOrderQuery);
 		
@@ -303,6 +307,48 @@ public class DatabaseConnectionService {
 		String makeOrderQuery="UPDATE orders SET customernote='"+finalizeOrder.getCustomerNote()+"',orderstatus='waiting' WHERE id='"+finalizeOrder.orderId+"';";
 		this.executeUpdate(makeOrderQuery);
 		
+	}
+	public List<Server> getServers() {
+		String getServersQuery = "SELECT*FROM servers;";
+		List<Server> listServer = new ArrayList<Server>();
+		try {
+			ResultSet rs = this.executeQuery(getServersQuery);
+			while(rs.next()) {
+				Server server = new Server();
+				server.setId(rs.getLong("id"));
+				server.setFullname(rs.getString("fullname"));
+				listServer.add(server);
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQLException {}",sqlex);
+		}
+	return listServer;
+	}
+	public List<ServerReport> getServerReport(String serverId) {
+		//first get all orders
+		String getAllOrdersFromServerQuery="SELECT fkserverid,fkorderid,fkcustomerid,customernote,totalprice,orderstatus,orderdate FROM servedorders INNER JOIN orders ON servedorders.fkorderid=orders.id WHERE servedorders.fkserverid='"+serverId+"';";
+		List<ServerReport> listServerReport = new ArrayList<ServerReport>();
+		try {
+			ResultSet rs = this.executeQuery(getAllOrdersFromServerQuery);
+			while(rs.next()) {
+				ServerReport serverReport = new ServerReport();
+				serverReport.setFkserverid(rs.getLong("fkserverid"));
+				serverReport.setFkorderid(rs.getLong("fkorderid"));
+				serverReport.setFkcustomerid(rs.getLong("fkcustomerid"));
+				serverReport.setCustomernote(rs.getString("customernote"));
+				serverReport.setTotalprice(rs.getInt("totalprice"));
+				serverReport.setOrderstatus(rs.getString("orderstatus"));
+				serverReport.setOrderdate(rs.getDate("orderdate"));
+				listServerReport.add(serverReport);
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQLException {}",sqlex);
+		}
+		return listServerReport;
+	}
+	public void putServer(Server server) {
+		String putServerQuery="INSERT INTO servers(fullname) VALUES('"+server.getFullname()+"');";
+		this.executeUpdate(putServerQuery);
 	}
 	
 	

@@ -32,19 +32,20 @@ Project should be deployed on a web server/servlet container.
 
 API Request Examples:
 ```
-... POST
-... GET
+... POST lorem
+... GET	Ipsum
 ...
 ```
 
 ## Documentation
 
 [Swagger UI ](http://localhost:8080/swagger-ui.html)  
-(if app deployed on localhost:8080, otherwise just go hostname/app-root/swagger-ui.html)
+(link only works if app has deployed on localhost:8080, otherwise just go hostname/app-root/swagger-ui.html)
 
 ## Issues
 
-We havent found any issues yet.
+I haven't found any issues yet.
+Except that I had no time to do error checking so expect lots of issues if not used correctly!
 
 ## Author
 

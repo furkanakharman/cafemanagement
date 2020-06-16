@@ -27,6 +27,13 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
+	//Customer checks their order status
+	@GetMapping("/customer/{customerId}")
+	public String myOrderStatus(@PathVariable String customerId) {
+		return orderService.myOrderStatus(customerId);
+		
+	}
+	
 	//List of MenuItems will be added to the db
 	@PutMapping("/customer/additems")
 	public String addItems(@RequestBody List<ItemOrder> itemOrder) {
@@ -36,17 +43,12 @@ public class OrderController {
 	}
 	
 	//Customer finalizes their order, customer note will be sent in this step.
-	@PostMapping("/customer")
+	@PostMapping(value="/customer",consumes="application/json")
 	public String makeOrder(@RequestBody FinalizedOrderEntity finalizedOrder) {
 		orderService.makeOrder(finalizedOrder);
 		return "done";
 	}
-	//Customer checks their order status
-	@GetMapping("/customer/{customerId}")
-	public String myOrderStatus(@PathVariable String customerId) {
-		return orderService.myOrderStatus(customerId);
-		
-	}
+
 	
 	//kitchen will receive Orders in "waiting" status
 	@GetMapping("/kitchen")
@@ -73,8 +75,8 @@ public class OrderController {
 		
 	}
 	//select ready to serve order and set its status to Served, then add orderid and serverid to Served orders
-	@PostMapping("/server")
-	public String orderServed(@PathVariable ServerObject serverObject) {
+	@PostMapping(value="/server",consumes="application/json")
+	public String orderServed(@RequestBody ServerObject serverObject) {
 		orderService.orderServed(serverObject);
 		return "done!";
 		//TODO:add proper response

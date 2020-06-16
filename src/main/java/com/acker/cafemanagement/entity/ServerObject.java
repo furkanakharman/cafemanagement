@@ -1,6 +1,5 @@
 package com.acker.cafemanagement.entity;
 
-import javax.persistence.Entity;
 
 
 public class ServerObject {

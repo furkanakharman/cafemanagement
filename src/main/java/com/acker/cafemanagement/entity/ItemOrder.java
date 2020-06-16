@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 /***
  * I wish I have used Hibernate or any ORM because this is getting confusing :(
  * Maybe my design sucks, I have made many mistakes but just realizing them.
- * "Akılsız başın cezasını Spaghetti Code çekermiş...
+ * "Akılsız başın cezasını Spaghetti Code çekermiş..."
 ***/
 
 public class ItemOrder {

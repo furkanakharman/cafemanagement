@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.acker.cafemanagement.entity.Customer;
 import com.acker.cafemanagement.entity.DineTable;
+import com.acker.cafemanagement.entity.Server;
+import com.acker.cafemanagement.entity.ServerReport;
 
 @Service
 public class UserService {
@@ -31,6 +33,22 @@ public class UserService {
 
 	public List<Customer> getCustomers() {
 		return dbConnectionService.getCustomers();
+		
+	}
+
+
+	public List<Server> getServers() {
+		return dbConnectionService.getServers();
+	}
+
+
+	public List<ServerReport> getServerReport(String serverId) {
+		return dbConnectionService.getServerReport(serverId);
+	}
+
+
+	public void putServer(Server server) {
+		dbConnectionService.putServer(server);
 		
 	}
 	
