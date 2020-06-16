@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuItems;
 import com.acker.cafemanagement.entity.OrderEntity;
+import com.acker.cafemanagement.entity.OrderKitchen;
+import com.acker.cafemanagement.entity.ServerObject;
 import com.acker.cafemanagement.service.OrderService;
 
 @RestController
@@ -25,10 +28,10 @@ public class OrderController {
 	
 	//List of MenuItems will be added to the db
 	@PutMapping("/customer/additems")
-	public String addItems(@RequestBody List<MenuItems> jsonMenuItems) {
+	public String addItems(@RequestBody List<ItemOrder> itemOrder) {
 		//add to itemorders table and link to the main order
-		orderService.addItems(jsonMenuItems);
-		return null;
+		return orderService.addItems(itemOrder);
+		
 	}
 	
 	//Customer finalizes their order, customer note will be sent in this step.
@@ -39,41 +42,41 @@ public class OrderController {
 	}
 	//Customer checks their order status
 	@GetMapping("/customer/{id}")
-	public String myOrderStatus(@PathVariable String id) {
-		orderService.myOrderStatus(id);
-		return null;
+	public String myOrderStatus(@PathVariable String customerId) {
+		return orderService.myOrderStatus(customerId);
+		
 	}
 	
 	//kitchen will receive Orders in "waiting" status
 	@GetMapping("/kitchen")
 	public @ResponseBody List<OrderEntity> getGivenOrders(){
-		orderService.getGivenOrders();
-		
-		return null;
+		return orderService.getGivenOrders();
+	
 	}
 	//kitchen will receive individual items in the order and set selected order as "preparing"
 	@GetMapping("/kitchen/{id}")
-	public @ResponseBody List<MenuItems> selectOrder(@PathVariable String id){
-		orderService.selectOrder(id);
-		return null;
+	public @ResponseBody List<OrderKitchen> selectOrder(@PathVariable String orderId){
+		return orderService.selectOrder(orderId);
+		
 	}
 	//kitchen will mark order as "Ready to Serve" then both servers and customers will be alerted
 	@PostMapping("/kitchen/{id}")
-	public String readyOrder(@PathVariable String id) {
-		orderService.readyOrder(id);
-		return null;
+	public String readyOrder(@PathVariable String orderId) {
+		return orderService.readyOrder(orderId);
+		
 	}
 	//list all orders with status "ready to serve"
 	@GetMapping("/server")
 	public @ResponseBody List<OrderEntity> isOrderReady(){
-		orderService.isOrderReady();
-		return null;
+		return orderService.isOrderReady();
+		
 	}
 	//select ready to serve order and set its status to Served, then add orderid and serverid to Served orders
-	@PostMapping("/server/{id}")
-	public String orderServed(@PathVariable String id) {
-		orderService.orderServed(id);
-		return null;
+	@PostMapping("/server")
+	public String orderServed(@PathVariable ServerObject serverObject) {
+		orderService.orderServed(serverObject);
+		return "done!";
+		//TODO:add proper response
 	}
 	
 	

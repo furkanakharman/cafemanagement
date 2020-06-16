@@ -26,7 +26,7 @@ Its main features are:
 
 ## Installation
 
-Should be deployed on a Server.
+Project should be deployed on a web server/servlet container.
 
 ## Usage
 
@@ -39,7 +39,8 @@ API Request Examples:
 
 ## Documentation
 
-[Swagger UI ](http://localhost:8080/swagger-ui.html)  (if app deployed on localhost:8080)
+[Swagger UI ](http://localhost:8080/swagger-ui.html)  
+(if app deployed on localhost:8080, otherwise just go hostname/app-root/swagger-ui.html)
 
 ## Issues
 
@@ -47,7 +48,7 @@ We havent found any issues yet.
 
 ## Author
 
-Furkan Akh.
+Furkan Akharman
 
 ## License
 

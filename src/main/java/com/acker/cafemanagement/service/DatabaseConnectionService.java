@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,8 +13,12 @@ import org.springframework.stereotype.Service;
 import com.acker.cafemanagement.entity.Customer;
 import com.acker.cafemanagement.entity.DatabaseConnection;
 import com.acker.cafemanagement.entity.DineTable;
+import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuCategory;
 import com.acker.cafemanagement.entity.MenuItems;
+import com.acker.cafemanagement.entity.OrderEntity;
+import com.acker.cafemanagement.entity.OrderKitchen;
+import com.acker.cafemanagement.entity.ServerObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +62,12 @@ public class DatabaseConnectionService {
 			logger.error("SQL Error {}",sqlex);
 		}
 		return rs;
+	}
+	
+	public void changeOrderStatus(String status,Long id) {
+		String changeOrderStatusQuery="UPDATE orders SET status='"+status+"' WHERE id="+id+";";
+		this.executeUpdate(changeOrderStatusQuery);
+			
 	}
 	
 	public List<MenuCategory> getMenuCategories() {
@@ -185,6 +196,105 @@ public class DatabaseConnectionService {
 			logger.error("SQL Error {}",sqlex);
 		}
 		return listCustomers;
+	}
+	
+	//returns list of orders marked as "Waiting"
+	public List<OrderEntity> getGivenOrders() {
+		String getGivenOrdersQuery = "SELECT id,fkcustomerid,customernote FROM orders WHERE orderstatus='Waiting';";
+		List<OrderEntity> listOrders = new ArrayList<OrderEntity>();
+		try {
+			ResultSet rs = this.executeQuery(getGivenOrdersQuery);
+			while(rs.next()) {
+				OrderEntity orderEntity = new OrderEntity();
+				orderEntity.setId(rs.getLong("id"));
+				orderEntity.setFkCustomerId(rs.getLong("fkcustomerid"));
+				orderEntity.setCustomerNote(rs.getString("customernote"));
+				listOrders.add(orderEntity);
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return listOrders;
+	}
+	//returns Customers' Ordered MenuItems, using associtation table between menuitem and orders, the ItemOrders table.
+	public List<OrderKitchen> selectOrder(String id) {
+		String selectOrderQuery = "SELECT fkorderid,itemname,quantity FROM menuitems INNER JOIN itemorders on menuitems.id = itemorders.fkmenuitemid WHERE itemorders.fkorderid ='"+id+"';";
+		List<OrderKitchen> listOrderKitchen = new ArrayList<OrderKitchen>();
+		try {
+			ResultSet rs = this.executeQuery(selectOrderQuery);
+			while(rs.next()) {
+				OrderKitchen orderKitchen = new OrderKitchen();
+				orderKitchen.setFkOrderId(rs.getLong("fkorderid"));
+				orderKitchen.setItemName(rs.getString("itemname"));
+				orderKitchen.setQuantity(rs.getInt("quantity"));
+				listOrderKitchen.add(orderKitchen);
+			}
+		} catch  (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return listOrderKitchen;
+	}
+	public int addItems(List<ItemOrder> listItemOrder) {
+		int result=-1;
+		for(Iterator<ItemOrder> it = listItemOrder.iterator();it.hasNext();) {
+			ItemOrder itemOrder = new ItemOrder();
+			itemOrder = it.next();
+			String addItemsQuery="INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES('"+itemOrder.fkOrderId+"','"+itemOrder.fkMenuItemId+"','"+itemOrder.quantity+"');";
+			result = this.executeUpdate(addItemsQuery);
+		}
+			return result;
+	}
+
+	//returns state of customers' order 
+	//states new,waiting,preparing,readytoserve
+	public String myOrderStatus(String id) {
+		String myOrderStatusQuery="SELECT orderstatus FROM orders WHERE id='"+id+"';";
+		String status="";
+		try {
+			ResultSet rs = this.executeQuery(myOrderStatusQuery);
+			while(rs.next()) {
+				status=rs.getString("orderstatus");
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return status;
+		
+	}
+	public String readyOrder(String orderId) {
+		String readyOrderQuery="UPDATE orders SET orderstatus='readytoserve';";
+		this.executeUpdate(readyOrderQuery);
+		return "Order "+orderId+" set Ready To Serve";
+		
+	}
+	
+	//TODO: repeating code, look getGivenOrders,
+	public List<OrderEntity> isOrderReady() {
+		String isOrderReadyQuery="SELECT id,fkcustomerid,customerNote,totalPrice,orderStatus FROM orders WHERE orderstatus='readytoserve';";
+		List<OrderEntity> listOrders = new ArrayList<OrderEntity>();
+		try {
+			ResultSet rs = this.executeQuery(isOrderReadyQuery);
+			while(rs.next()) {
+				OrderEntity orderEntity = new OrderEntity();
+				orderEntity.setId(rs.getLong("id"));
+				orderEntity.setFkCustomerId(rs.getLong("fkcustomerid"));
+				orderEntity.setCustomerNote(rs.getString("customernote"));
+				listOrders.add(orderEntity);
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return listOrders;
+		
+	}
+	
+	//served order's status will be set to "served" then added to server's record
+	public void orderServed(ServerObject serverObject) {
+		String setOrderServedQuery = "UPDATE orders SET status='served' WHERE id='"+serverObject.getOrderId()+"';";
+		String recordServedOrderQuery = "INSERT INTO servedorders(fkserverid,fkorderid) VALUES('"+serverObject.getServerId()+"','"+serverObject.getOrderId()+"';";
+		this.executeUpdate(setOrderServedQuery);
+		this.executeUpdate(recordServedOrderQuery);
+		
 	}
 	
 	

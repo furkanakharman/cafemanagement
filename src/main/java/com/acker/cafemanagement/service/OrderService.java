@@ -2,40 +2,50 @@ package com.acker.cafemanagement.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.acker.cafemanagement.entity.ItemOrder;
 import com.acker.cafemanagement.entity.MenuItems;
+import com.acker.cafemanagement.entity.OrderEntity;
+import com.acker.cafemanagement.entity.OrderKitchen;
+import com.acker.cafemanagement.entity.ServerObject;
 
 @Service
 public class OrderService {
+	final Logger logger = LoggerFactory.getLogger(MenuService.class);
+	@Autowired
+	DatabaseConnectionService dbConnectionService;
+	
+	public void orderServed(ServerObject serverObject) {
+		dbConnectionService.orderServed(serverObject);
+	}
 
-	public void orderServed(String id) {
-		// TODO Auto-generated method stub
+	public List<OrderEntity> isOrderReady() {
+		return dbConnectionService.isOrderReady();
+				
+	}
+
+	public String readyOrder(String orderId) {
+		return dbConnectionService.readyOrder(orderId);
+		
 		
 	}
 
-	public void isOrderReady() {
-		// TODO Auto-generated method stub
+	public List<OrderKitchen> selectOrder(String id) {
+		return dbConnectionService.selectOrder(id);
 		
 	}
 
-	public void readyOrder(String id) {
-		// TODO Auto-generated method stub
+	public List<OrderEntity> getGivenOrders() {
+		return dbConnectionService.getGivenOrders();
 		
 	}
 
-	public void selectOrder(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void getGivenOrders() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void myOrderStatus(String id) {
-		// TODO Auto-generated method stub
+	public String myOrderStatus(String id) {
+		return dbConnectionService.myOrderStatus(id);
 		
 	}
 
@@ -44,8 +54,16 @@ public class OrderService {
 		
 	}
 
-	public void addItems(List<MenuItems> jsonMenuItems) {
-		// TODO Auto-generated method stub
+	public String addItems(List<ItemOrder> jsonMenuItems) {
+		int result = dbConnectionService.addItems(jsonMenuItems);
+		if (result>=0) {
+			logger.info("Post Operation was Successful");
+			return "Operation was Successful";			
+		}
+		else {
+			logger.info("Post Operation was UnSuccessful");
+			return "Operation was Unsuccessful";			
+		}
 		
 	}
 
