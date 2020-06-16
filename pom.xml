@@ -47,11 +47,7 @@
     <version>1.7.30</version>
 	</dependency>
 		<!-- Swagger v2.9.2 is not compatible with Spring Boot 2.2.x, using compatible snapshot version -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>20.0</version>
-		</dependency>
+		
 	<dependency>
     	<groupId>io.springfox</groupId>
     	<artifactId>springfox-swagger2</artifactId>
