@@ -152,12 +152,13 @@ public class DatabaseConnectionService {
 	}
 	
 	public List<DineTable> getDineTables() {
-		String getDineTablesQuery="SELECT tablenumber,availability FROM tables;";
+		String getDineTablesQuery="SELECT id,tablenumber,availability FROM tables;";
 		List<DineTable> listDineTables = new ArrayList<DineTable>();
 		try {
 			ResultSet rs = this.executeQuery(getDineTablesQuery);
 		while(rs.next()) { 
 		DineTable dineTable = new DineTable();
+		dineTable.setId(rs.getLong("id"));
 		dineTable.setTableNumber(rs.getInt("tablenumber"));
 		dineTable.setAvailability(rs.getString("availability"));
 		listDineTables.add(dineTable);
