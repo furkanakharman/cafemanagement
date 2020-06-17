@@ -8,6 +8,7 @@ public class Customer {
 	private Long id;
 	public String name;
 	public Long fktablenumber;
+	public Long orderId;
 	@ApiModelProperty(position = 1,required=false)
 	public Long getId() {
 		return id;
@@ -28,6 +29,13 @@ public class Customer {
 	}
 	public void setFktablenumber(Long fktablenumber) {
 		this.fktablenumber = fktablenumber;
+	}
+	@ApiModelProperty(position=4,required=false)
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 
 	

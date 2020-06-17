@@ -17,13 +17,13 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/menu")
-@CrossOrigin(origins = "http://localhost:4200") // for angular to interact with the controller
 public class MenuController {
 	final Logger logger = LoggerFactory.getLogger(MenuController.class);
 	@Autowired
 	private MenuService menuService;
 
 	//TODO: change this mapping
+	@Deprecated
 	@ApiOperation(value ="Does nothing but returns a string",notes="")
 	@GetMapping("/")
 	public String mainMenu() {

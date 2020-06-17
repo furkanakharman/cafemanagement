@@ -32,8 +32,7 @@ Project should be deployed on a web server/servlet container.
 
 API Request Examples:
 ```
-... POST lorem
-... GET	Ipsum
+Check EXAMPLES.md or Swagger UI
 ...
 ```
 

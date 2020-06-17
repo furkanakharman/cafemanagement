@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/users")
+//@CrossOrigin(origins = "http://localhost:4200/**", allowedHeaders = "*") // for angular to interact with the controller
 public class UserController {
 	final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
@@ -50,7 +52,8 @@ public class UserController {
 	public @ResponseBody Customer putCustomer(@RequestBody Customer jsonString) {
 		return userService.putCustomer(jsonString);
 	}
-	@ApiOperation(value ="Deletes a customer",notes="")
+	@Deprecated
+	@ApiOperation(value ="Deletes a customer",notes="NOT YET IMPLEMENTED")
 	@DeleteMapping(value="/customers/{id}")
 	public String deleteCustomer(@PathVariable String id) {
 		//TODO:Implement delete customer function
@@ -75,7 +78,8 @@ public class UserController {
 		userService.putServer(jsonString);
 		return jsonString;
 	}
-	@ApiOperation(value ="Deletes a server",notes="Fire a server")
+	@Deprecated
+	@ApiOperation(value ="Deletes a server",notes="Fire a server, NOT YET IMPLEMENTED")
 	@DeleteMapping(value="/servers/{serverId}")
 	public String deleteServer(@PathVariable String serverId) {
 		//TODO:delete server with given id

@@ -3,6 +3,8 @@ package com.acker.cafemanagement.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+
+//TODO: add customernote to customer entity, then delete this entity.
 @ApiModel
 public class FinalizedOrderEntity {
 		private Long id;

@@ -36,7 +36,7 @@ public class DatabaseConnectionService {
 		logger.info("Connecting to database");
 		return databaseConnection.getConnection();				
 	}
-	//For INSERT AND UPDATE QUERIES
+	//FOR INSERT AND UPDATE QUERIES
 	private int executeUpdate(String sqlQuery) {
 		int result=-1;
 		PreparedStatement statement;
@@ -143,26 +143,39 @@ public class DatabaseConnectionService {
 		}
 		return customer;
 	}
-	//creates user's empty order to fill in later
-	public int createInitialOrder(Long id) {
-		String createInitialOrderQuery="INSERT INTO orders(fkcustomerid) VALUES ("+id+");";
-		return this.executeUpdate(createInitialOrderQuery);
+	//creates user's empty order then adds orderId to Customer object
+	public Customer createInitialOrder(Customer customer) {
+		String createInitialOrderQuery="INSERT INTO orders(fkcustomerid) VALUES ("+customer.getId()+");";
+		this.executeUpdate(createInitialOrderQuery);
+		String getOrderIdByCustomerId=("SELECT id FROM orders WHERE fkcustomerid='"+customer.getId()+"';");
+		try {
+			ResultSet rs = this.executeQuery(getOrderIdByCustomerId);
+			while(rs.next()){
+			customer.setOrderId(rs.getLong("id"));
+			}
+		} catch (SQLException sqlex) {
+			logger.error("SQL Error {}",sqlex);
+		}
+		return customer;
+
+		
 	}
 	public void setTableStatusByTableNumber(String status,Long tableNumber) {
 		String setTableStatus="UPDATE tables SET availability='"+status+"' WHERE id="+tableNumber+";";
 		this.executeUpdate(setTableStatus);
 		
 	}
+	
 	//Create a user and set their table Occupied then create empty order
 	public Customer putCustomer(Customer customer) {
 		String putCustomerQuery="INSERT INTO customers(name,fktablenumber) VALUES('"+customer.name+"',"+customer.fktablenumber+");";
 		this.executeUpdate(putCustomerQuery);
 		this.setTableStatusByTableNumber("Occupied",customer.fktablenumber);
-		Customer insertedCustormer = new Customer();
+		Customer insertedCustomer = new Customer();
 	
-		insertedCustormer = this.getCustomerByTableNumber(customer.fktablenumber);
-		this.createInitialOrder(insertedCustormer.getId());
-		return insertedCustormer;
+		insertedCustomer = this.getCustomerByTableNumber(customer.fktablenumber);
+		return this.createInitialOrder(insertedCustomer);
+
 	}
 	
 	public List<DineTable> getDineTables() {
@@ -203,7 +216,7 @@ public class DatabaseConnectionService {
 	
 	//returns list of orders marked as "Waiting"
 	public List<OrderEntity> getGivenOrders() {
-		String getGivenOrdersQuery = "SELECT id,fkcustomerid,customernote FROM orders WHERE orderstatus='waiting';";
+		String getGivenOrdersQuery = "SELECT id,fkcustomerid,customernote,totalprice,orderstatus FROM orders WHERE orderstatus='waiting';";
 		List<OrderEntity> listOrders = new ArrayList<OrderEntity>();
 		try {
 			ResultSet rs = this.executeQuery(getGivenOrdersQuery);
@@ -212,6 +225,8 @@ public class DatabaseConnectionService {
 				orderEntity.setId(rs.getLong("id"));
 				orderEntity.setFkCustomerId(rs.getLong("fkcustomerid"));
 				orderEntity.setCustomerNote(rs.getString("customernote"));
+				orderEntity.setTotalPrice(rs.getInt("totalprice"));
+				orderEntity.setOrderStatus(rs.getString("orderstatus"));
 				listOrders.add(orderEntity);
 			}
 			
