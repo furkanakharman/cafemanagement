@@ -8,7 +8,7 @@ CREATE TABLE orders(id IDENTITY PRIMARY KEY,fkCustomerId LONG,FOREIGN KEY (fkCus
 CREATE TABLE menuCategory(id IDENTITY PRIMARY KEY,categoryName VARCHAR(50),categoryDescription VARCHAR(200));
 CREATE TABLE menuItems(id IDENTITY PRIMARY KEY,fkMenuCategory LONG,FOREIGN KEY (fkMenuCategory) REFERENCES MenuCategory(id),itemName VARCHAR(40),itemDescription VARCHAR(200),imageUrl VARCHAR(250),cost INT);
 ---
-CREATE TABLE itemOrders(id IDENTITY PRIMARY KEY,fkOrderId LONG,FOREIGN KEY (fkOrderId) REFERENCES orders(id),fkMenuItemId LONG,FOREIGN KEY (fkMenuItemId) REFERENCES menuItems(id),quantity INT,totalPrice INT);
+CREATE TABLE itemOrders(id IDENTITY PRIMARY KEY,fkOrderId LONG,FOREIGN KEY (fkOrderId) REFERENCES orders(id),fkMenuItemId LONG,FOREIGN KEY (fkMenuItemId) REFERENCES menuItems(id),quantity INT,totalPrice INT,orderowner VARCHAR(30));
 ---Servers and their served orders
 CREATE TABLE servers(id IDENTITY PRIMARY KEY, fullName VARCHAR(25));
 CREATE TABLE servedOrders(id IDENTITY PRIMARY KEY,fkServerId LONG,FOREIGN KEY (fkServerId) REFERENCES servers(id),fkOrderId LONG,FOREIGN KEY (fkOrderId) REFERENCES orders(id));

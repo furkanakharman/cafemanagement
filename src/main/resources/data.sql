@@ -38,10 +38,10 @@ INSERT INTO orders(fkCustomerId,customerNote,totalPrice,orderstatus) VALUES(2,'s
 INSERT INTO orders(fkCustomerId,customerNote,totalPrice,orderstatus) VALUES(3,'ilik olsun',40,'waiting');
 INSERT INTO orders(fkCustomerId,customerNote,totalPrice,orderstatus) VALUES(4,'icecek yemekle gelsin',70,'waiting');
 
-INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(1,2,1);
-INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(1,4,1);
-INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(2,5,1);
-INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(2,1,1);
+INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity,orderowner) VALUES(1,2,1,'Deniz');
+INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity,orderowner) VALUES(1,4,1,'Ece');
+INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity,orderowner) VALUES(2,5,1,'Ayse');
+INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity,orderowner) VALUES(2,1,1,'Mehmet');
 INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(3,3,1);
 INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(3,5,1);
 INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES(4,2,1);

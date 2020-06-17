@@ -1,6 +1,5 @@
 package com.acker.cafemanagement.entity;
 
-import javax.persistence.Entity;
 
 /***
  * I wish I have used Hibernate or any ORM because this is getting confusing :(
@@ -13,6 +12,14 @@ public class ItemOrder {
 	public Long fkOrderId;
 	public Long fkMenuItemId;
 	public int quantity;
+	public String orderOwner;
+	
+	public String getOrderOwner() {
+		return orderOwner;
+	}
+	public void setOrderOwner(String orderOwner) {
+		this.orderOwner = orderOwner;
+	}
 	public Long getFkOrderId() {
 		return fkOrderId;
 	}

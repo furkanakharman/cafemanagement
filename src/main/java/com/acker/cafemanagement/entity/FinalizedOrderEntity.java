@@ -7,7 +7,7 @@ public class FinalizedOrderEntity {
 		public Long customerId;
 		public Long orderId;
 		public String customerNote;
-		public String orderSplit;
+		
 		public Long getCustomerId() {
 			return customerId;
 		}
@@ -26,12 +26,7 @@ public class FinalizedOrderEntity {
 		public void setCustomerNote(String customerNote) {
 			this.customerNote = customerNote;
 		}
-		public String getOrderSplit() {
-			return orderSplit;
-		}
-		public void setOrderSplit(String orderSplit) {
-			this.orderSplit = orderSplit;
-		}
+	
 		public Long getId() {
 			return id;
 		}

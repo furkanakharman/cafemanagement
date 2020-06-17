@@ -245,7 +245,7 @@ public class DatabaseConnectionService {
 		for(Iterator<ItemOrder> it = listItemOrder.iterator();it.hasNext();) {
 			ItemOrder itemOrder = new ItemOrder();
 			itemOrder = it.next();
-			String addItemsQuery="INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity) VALUES('"+itemOrder.fkOrderId+"','"+itemOrder.fkMenuItemId+"','"+itemOrder.quantity+"');";
+			String addItemsQuery="INSERT INTO itemorders(fkorderid,fkmenuitemid,quantity,orderowner) VALUES('"+itemOrder.fkOrderId+"','"+itemOrder.fkMenuItemId+"','"+itemOrder.quantity+"','"+itemOrder.orderOwner+"');";
 			result = this.executeUpdate(addItemsQuery);
 		}
 			return result;
