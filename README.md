@@ -47,8 +47,8 @@ Check EXAMPLES.md or Swagger UI
 
 ## Issues
 
-I haven't found any issues yet.
-Except that I had no time to do error checking so expect lots of issues if not used correctly!
+There are lots of issues.
+For an example I had no time to do error checking so expect lots of errors if not used correctly!
 
 ## Author
 
