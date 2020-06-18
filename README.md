@@ -20,13 +20,17 @@ Its main features are:
 
 + Create Customers.
 
-+ Lorem Ipsum.
++ Order Items from menu.
 
-+ Dolor
++ Check Servers' performance.
+
++ and many more.
 
 ## Installation
 
-Project should be deployed on a web server/servlet container.
+Run ``` ./mvnw spring-boot:run ``` command in root directory of the project.
+
+Project can also be deployed on a web server/servlet container.
 
 ## Usage
 

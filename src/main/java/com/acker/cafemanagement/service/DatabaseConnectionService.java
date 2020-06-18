@@ -166,6 +166,7 @@ public class DatabaseConnectionService {
 		
 	}
 	
+	//TODO:this function creates order even if the tablenumber was not valid!
 	//Create a user and set their table Occupied then create empty order
 	public Customer putCustomer(Customer customer) {
 		String putCustomerQuery="INSERT INTO customers(name,fktablenumber) VALUES('"+customer.name+"',"+customer.fktablenumber+");";
