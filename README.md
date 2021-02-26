@@ -25,6 +25,7 @@ Its main features are:
 + Check Servers' performance.
 
 + and many more.
++ Problems with the code: Package by layer instead of Package by Feature, Dependency injection done with Reflection(Autowired) instead of Constructor or Method DI.
 
 ## Installation
 
